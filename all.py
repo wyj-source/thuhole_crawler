@@ -6,20 +6,19 @@ import random
 headers = {
         'Referer': 'https://web.thuhole.com/',
         'TE': 'trailers',
-        'TOKEN': '',
-        'User-Agent': ''
+        'TOKEN': 'afge3swocqac7uzdko7wm4znnvowqhfm',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
 }
 
 headers_without_te = headers
 
 proxies = {
-        'http': 'socks5h://127.0.0.1:1080',
-        'https': 'socks5h://127.0.0.1:1080'
+        'http': 'socks5h://127.0.0.1:33211',
+        'https': 'socks5h://127.0.0.1:33211'
 }
 
-
 def req_page(page:int):
-    return requests.get(f"https://tapi.thuhole.com/v3/contents/post/attentions?page={page}&device=0&v=v3.0.6-455338", headers=headers, proxies=proxies)
+    return requests.get(f"https://tapi.thuhole.com/v3/contents/post/attentions?page={page}&device=0&v=v3.0.6-455338", headers=headers, proxies=proxies,verify=False)
 
 
 def get_attention_pages():
@@ -38,7 +37,7 @@ def get_attention_pages():
 
 def get_detail(pid):
     return requests.get(f'https://tapi.thuhole.com/v3/contents/post/detail?pid={pid}&device=0&v=v3.0.6-455338',
-                        headers=headers, proxies=proxies)
+                        headers=headers, proxies=proxies,verify=False)
 
 def get_all_details(prefix, begin, pages):
     for i in range(begin, pages + 1):
@@ -58,7 +57,7 @@ def get_all_details(prefix, begin, pages):
 
 
 def req_key(page, key):
-    return requests.get(f'https://tapi.thuhole.com/v3/contents/search?pagesize=50&page={page}&keywords={key}&device=0&v=v3.0.6-455338', headers=headers_without_te, proxies=proxies)
+    return requests.get(f'https://tapi.thuhole.com/v3/contents/search?pagesize=50&page={page}&keywords={key}&device=0&v=v3.0.6-455338', headers=headers_without_te, proxies=proxies,verify=False)
 
 
 def get_search_pages(key):
