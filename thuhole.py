@@ -8,7 +8,7 @@ warnings.filterwarnings('ignore')
 headers = {
         'Referer': 'https://web.thuhole.com/',
         'TE': 'trailers',
-        'TOKEN': 'afge3swocqac7uzdko7wm4znnvowqhfm', # change your token here
+        'TOKEN': '', # change your token here
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
 }
 
@@ -23,20 +23,24 @@ def req_page(page:int):
     return requests.get(f"https://tapi.thuhole.com/v3/contents/post/attentions?page={page}&device=0&v=v3.0.6-455338", headers=headers, proxies=proxies,verify=False)
 
 
-def get_attention_pages():
+def get_attention_pages(name=''):
     """
     introduction
     ------------
     获取所有的关注树洞，按页数保存json文件
 
+    param
+    ------------
+    保存的文件名字
+
     Notes
     ----------
-    一次性获取所有的关注列表，保存的文件名为attention_page_{i}.json
+    一次性获取所有的关注列表，保存的文件名为attention_page_{name}_{i}.json
     """
 
     i = 1
     while True:
-        with open(f'attention_page_{i}.json', 'wb') as f:
+        with open(f'attention_page_{name}_{i}.json', 'wb') as f:
             res = req_page(i).content
             js = json.loads(str(res, encoding='utf-8'))
             f.write(res)
@@ -110,10 +114,14 @@ def get_search_pages(key):
             js = json.loads(str(res, encoding='utf-8'))
             f.write(res)
             print('page', i, 'done len', len(str(res, encoding='utf-8')))
-            if len(js['data']) == 0:
-                break
-            else:
-                i += 1
-                time.sleep(1)
+            try:
+                if len(js['data']) == 0:
+                    break
+                else:
+                    i += 1
+                    time.sleep(1)
+            except(KeyError):
+                print(f'done {key}')
+                return
 
 
